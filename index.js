@@ -1,18 +1,20 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+const { app, BrowserWindow, screen } = require("electron");
 
 const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  window = new BrowserWindow({
+    width: width / 1.25,
+    height: height / 1.25,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
     },
   });
 
-  win.setMenuBarVisibility(false);
-  win.loadFile("index.html");
+  window.loadFile("dist/index.html");
 };
+
+let window = null;
 
 app.whenReady().then(() => {
   createWindow();
