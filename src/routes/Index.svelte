@@ -73,6 +73,9 @@
       clearInterval(interval);
       if(result == "complete") {
         log.innerText += " success";
+        setTimeout(() => {
+          navigate("/home", { replace: true });
+        }, 1000);
       } else {
         setTimeout(retryTimeout, 1500);
         log.innerText += " failed";
@@ -120,6 +123,14 @@
 </main>
 
 <style>
+  main {
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #222;
+  }
   #headerContainer {
     display: flex;
     justify-content: flex-start;
@@ -216,6 +227,10 @@
     border: 2px solid white;
     background-color: #222;
     height: 4vh;
+  }
+
+  a {
+    text-decoration: underline;
   }
 
   p {
