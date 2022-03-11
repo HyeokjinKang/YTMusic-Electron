@@ -139,9 +139,11 @@
     top: 40vh;
     opacity: 0;
     transition-duration: 0.5s;
+    pointer-events: none;
   }
 
   #formContainer.visible {
+    pointer-events: all;
     left: 0vh;
     opacity: 1;
   }
