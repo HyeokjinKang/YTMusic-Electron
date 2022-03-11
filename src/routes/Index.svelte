@@ -1,4 +1,7 @@
 <script>
+// @ts-nocheck
+
+  import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
 
   let url = "";
@@ -66,7 +69,6 @@
       }
       log.innerText += "\nSaving Data";
       interval = setInterval(loadingInterval, 250);
-      // @ts-ignore
       const result = await window.electronAPI.initializeSave(url, id, pw);
       clearInterval(interval);
       if(result == "complete") {
@@ -83,6 +85,16 @@
       return;
     }
   }
+
+  onMount(async () => {
+    const auth = await window.electronAPI.getSavedData();
+    if(auth[0] != undefined) {
+      url = auth[0];
+      id = auth[1];
+      pw = auth[2];
+      verifyAuth();
+    }
+  });
 </script>
 
 <main>

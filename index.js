@@ -44,6 +44,10 @@ app.on("window-all-closed", () => {
   }
 });
 
+ipcMain.handle("data-check", async (event) => {
+  return [store.get("url"), store.get("id"), store.get("pw")];
+});
+
 ipcMain.handle("initialize-save", async (event, data) => {
   store.set("url", data[0]);
   store.set("id", data[1]);
