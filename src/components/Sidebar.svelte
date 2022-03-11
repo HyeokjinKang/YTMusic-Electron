@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
 
@@ -45,6 +45,9 @@
 
 <style>
   #sideBar {
+    position: fixed;
+    left: 0;
+    top: 0;
     box-sizing: border-box;
     background-color: #333;
     display: flex;

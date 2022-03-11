@@ -9,6 +9,7 @@
   
   import Sidebar from "./components/Sidebar.svelte";
   import Player from "./components/Player.svelte";
+  import Searchbox from "./components/Searchbox.svelte";
 
   const routes = {
     '/': Index,
@@ -23,7 +24,10 @@
 <div id="mainContainer">
   <Sidebar selected={screen} />
   <div id="contentContainer">
-    <Router {routes}/>
+    <Searchbox />
+    <div id="routerContainer">
+      <Router {routes}/>
+    </div>
   </div>
 </div>
 <Player />
@@ -37,10 +41,19 @@
   }
 
   #contentContainer {
-    padding-left: 2vw;
-    padding-right: 2vw;
+    display: flex;
+    flex-direction: column;
+    padding-left: 15vw;
     box-sizing: border-box;
-    width: 85vw;
+    width: 100vw;
     height: 100%;
+  }
+
+  #routerContainer {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+    padding: 0vw 2vw 0vw 2vw;
+    box-sizing: border-box;
   }
 </style>
