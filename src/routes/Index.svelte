@@ -38,7 +38,7 @@
       if(connection.status == "success" && connection.message == "welcome to YTM-server") {
         log.innerText += " ok";
       } else {
-        setTimeout(retryTimeout, 1000);
+        setTimeout(retryTimeout, 1500);
         log.innerText += " failed";
         return;
       }
@@ -49,7 +49,7 @@
       if(auth.length == 3 && auth[0].title != undefined && auth[1].title != undefined && auth[2].title != undefined) {
         log.innerText += " ok";
       } else {
-        setTimeout(retryTimeout, 1000);
+        setTimeout(retryTimeout, 1500);
         log.innerText += " failed";
         return;
       }
@@ -60,7 +60,7 @@
       if(data.length == 15) {
         log.innerText += " ok";
       } else {
-        setTimeout(retryTimeout, 1000);
+        setTimeout(retryTimeout, 1500);
         log.innerText += " failed";
         return;
       }
@@ -72,12 +72,12 @@
       if(result == "complete") {
         log.innerText += " success";
       } else {
-        setTimeout(retryTimeout, 1000);
+        setTimeout(retryTimeout, 1500);
         log.innerText += " failed";
         return;
       }
     } catch(e) {
-      setTimeout(retryTimeout, 1000);
+      setTimeout(retryTimeout, 1500);
       clearInterval(interval);
       log.innerText += " failed";
       return;
