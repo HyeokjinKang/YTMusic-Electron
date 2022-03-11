@@ -1,5 +1,5 @@
 <script>
-  import { Router, Route } from "svelte-routing";
+  import Router from "svelte-spa-router";
 
   import Index from "./routes/Index.svelte";
 
@@ -10,21 +10,22 @@
   import Sidebar from "./components/Sidebar.svelte";
   import Player from "./components/Player.svelte";
 
-  export let url = "";
+  const routes = {
+    '/': Index,
+    '/home': Home,
+    '/explore': Explore,
+    '/library': Library,
+  };
+
   export let screen = 0;
 </script>
 
-<Router url="{url}">
 <div id="mainContainer">
   <Sidebar selected={screen} />
   <div id="contentContainer">
-      <Route path=""><Index /></Route>
-      <Route path="/home"><Home /></Route>
-      <Route path="/explore"><Explore /></Route>
-      <Route path="/library"><Library /></Route>
+    <Router {routes}/>
   </div>
 </div>
-</Router>
 <Player />
 
 <style>

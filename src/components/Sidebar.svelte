@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { navigate } from "svelte-routing";
+  import { push } from "svelte-spa-router";
 
   export let selected;
 
@@ -10,7 +10,7 @@
 
   const link = (n) => {
     selected = n;
-    navigate(links[n], { replace: true });
+    push(links[n]);
     indicator.style.marginTop = `${6 * selected}vh`;
   };
 

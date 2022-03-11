@@ -2,7 +2,7 @@
 // @ts-nocheck
 
   import { onMount } from "svelte";
-  import { navigate } from "svelte-routing";
+  import { push } from "svelte-spa-router";
 
   let url = "";
   let id = "";
@@ -74,7 +74,7 @@
       if(result == "complete") {
         log.innerText += " success";
         setTimeout(() => {
-          navigate("/home", { replace: true });
+          push('/home');
         }, 1000);
       } else {
         setTimeout(retryTimeout, 1500);
