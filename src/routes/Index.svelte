@@ -1,0 +1,210 @@
+<script>
+  import { navigate } from "svelte-routing";
+
+  let url = "";
+  let id = "";
+  let pw = "";
+
+  let formContainer, logContainer, log;
+
+  const fetchWithAuth = async (url) => {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+          "Authorization": `Basic ${btoa(`${id}:${pw}`)}`
+      }
+    });
+    const json = await res.json();
+    return json;
+  }
+
+  const loadingInterval = () => {
+    log.innerText += ".";
+  }
+
+  const retryTimeout = () => {
+    formContainer.classList.add("visible");
+    logContainer.classList.add("invisible");
+  }
+
+  const verifyAuth = async () => {
+    formContainer.classList.remove("visible");
+    logContainer.classList.remove("invisible");
+    log.innerText = "Connection";
+    let interval = setInterval(loadingInterval, 250);
+    try {
+      const connection = await fetchWithAuth(url);
+      clearInterval(interval);
+      if(connection.status == "success" && connection.message == "welcome to YTM-server") {
+        log.innerText += " ok";
+      } else {
+        setTimeout(retryTimeout, 1000);
+        log.innerText += " failed";
+        return;
+      }
+      log.innerText += "\nAuth";
+      interval = setInterval(loadingInterval, 250);
+      const auth = await fetchWithAuth(`${url}/getHome/3`);
+      clearInterval(interval);
+      if(auth.length == 3 && auth[0].title != undefined && auth[1].title != undefined && auth[2].title != undefined) {
+        log.innerText += " ok";
+      } else {
+        setTimeout(retryTimeout, 1000);
+        log.innerText += " failed";
+        return;
+      }
+      log.innerText += "\nFetch Data";
+      interval = setInterval(loadingInterval, 250);
+      const data = await fetchWithAuth(`${url}/getHome/15`);
+      clearInterval(interval);
+      if(data.length == 15) {
+        log.innerText += " ok";
+      } else {
+        setTimeout(retryTimeout, 1000);
+        log.innerText += " failed";
+        return;
+      }
+      log.innerText += "\nSaving Data";
+      interval = setInterval(loadingInterval, 250);
+      // @ts-ignore
+      const result = await window.electronAPI.initializeSave(url, id, pw);
+      clearInterval(interval);
+      if(result == "complete") {
+        log.innerText += " success";
+      } else {
+        setTimeout(retryTimeout, 1000);
+        log.innerText += " failed";
+        return;
+      }
+    } catch(e) {
+      setTimeout(retryTimeout, 1000);
+      clearInterval(interval);
+      log.innerText += " failed";
+      return;
+    }
+  }
+</script>
+
+<main>
+  <div id="headerContainer">
+    <img src="./images/icon.png" alt="YTM" id="logoIcon">
+    <span id="title">Authentication</span>
+  </div>
+  <p class="paddingLeft text">To use YTM-electron, you should set your own <a href="https://github.com/HyeokjinKang/YTM-server">YTM-server.</a>
+  <br>Fill in the form below after all the settings are done.</p>
+  <div id="formContainer" class="paddingLeft visible" bind:this={formContainer}>
+    <div id="loginContainer">
+      <input type="text" bind:value={url} placeholder="URL (https://...)">
+      <input type="text" bind:value={id} placeholder="ID">
+      <input type="password" bind:value={pw} placeholder="Password">
+    </div>
+    <div id="nextButton" on:click={verifyAuth}>
+      <img src="./icons/arrow-right.svg" alt=">" id="nextIcon">
+    </div>
+  </div>
+  <div id="logContainer" class="paddingLeft invisible" bind:this={logContainer}>
+    <p id="log" bind:this={log}></p>
+  </div>
+</main>
+
+<style>
+  #headerContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    height: 12vh;
+    padding-left: 2vw;
+  }
+
+  #logoIcon {
+    width: 6vh;
+    height: 6vh;
+  }
+
+  #title {
+    font-weight: 700;
+    font-size: 4vh;
+    padding-left: 1vw;
+  }
+
+  #formContainer {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 20vh;
+    left: -10vh;
+    top: 40vh;
+    opacity: 0;
+    transition-duration: 0.5s;
+  }
+
+  #formContainer.visible {
+    left: 0vh;
+    opacity: 1;
+  }
+
+  #logContainer {
+    position: fixed;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 20vh;
+    left: 0vh;
+    top: 40vh;
+    opacity: 1;
+    transition-duration: 0.5s;
+  }
+
+  #logContainer.invisible {
+    opacity: 0;
+  }
+
+  #loginContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  #nextButton {
+    cursor: pointer;
+    margin-left: 2vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 2px solid white;
+    border-radius: 4vh;
+    width: 4vh;
+    height: 4vh;
+  }
+
+  #nextIcon {
+    height: 1.5vh;
+  }
+
+  .paddingLeft {
+    padding-left: 6vw;
+  }
+
+  .text {
+    font-size: 2vh;
+    font-weight: 300;
+  }
+
+  input {
+    padding-left: 1vw;
+    border-radius: 10vh;
+    border: 2px solid white;
+    background-color: #222;
+    height: 4vh;
+  }
+
+  p {
+    margin: 0;
+  }
+</style>
