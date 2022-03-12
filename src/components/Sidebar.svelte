@@ -55,7 +55,7 @@
     align-items: flex-start;
     flex-direction: column;
     width: 15vw;
-    height: 100%;
+    height: 90vh;
     padding-top: 3vh;
   }
 

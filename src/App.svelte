@@ -19,6 +19,7 @@
   };
 
   export let screen = 0;
+  export let id = "";
 </script>
 
 <div id="mainContainer">
@@ -30,7 +31,9 @@
     </div>
   </div>
 </div>
-<Player />
+<div id="playerContainer">
+  <Player id={id} />
+</div>
 
 <style>
   #mainContainer {
@@ -55,5 +58,11 @@
     height: 100%;
     padding: 0vw 2vw 0vw 2vw;
     box-sizing: border-box;
+  }
+
+  #playerContainer {
+    background-color: #222;
+    width: 100vw;
+    height: 10vh;
   }
 </style>
