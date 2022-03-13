@@ -1,9 +1,7 @@
 <script>
-// @ts-nocheck
-
+  import { homeData } from '../stores.js';
   import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
-
   let url = "";
   let id = "";
   let pw = "";
@@ -47,9 +45,10 @@
       }
       log.innerText += "\nAuth";
       interval = setInterval(loadingInterval, 250);
-      const auth = await fetchWithAuth(`${url}/getHome/3`);
+      const auth = await fetchWithAuth(`${url}/auth`);
       clearInterval(interval);
-      if(auth.length == 3 && auth[0].title != undefined && auth[1].title != undefined && auth[2].title != undefined) {
+      console.log(auth);
+      if(auth.status == "success" && auth.message == "authentication successful") {
         log.innerText += " ok";
       } else {
         setTimeout(retryTimeout, 1500);
@@ -61,6 +60,7 @@
       const data = await fetchWithAuth(`${url}/getHome/15`);
       clearInterval(interval);
       if(data.length == 15) {
+        homeData.set(data);
         log.innerText += " ok";
       } else {
         setTimeout(retryTimeout, 1500);
@@ -69,19 +69,29 @@
       }
       log.innerText += "\nSaving Data";
       interval = setInterval(loadingInterval, 250);
-      const result = await window.electronAPI.initializeSave(url, id, pw);
-      clearInterval(interval);
-      if(result == "complete") {
-        log.innerText += " success";
+      try {
+        // @ts-ignore
+        const result = await window.electronAPI.initializeSave(url, id, pw);
+        clearInterval(interval);
+        if(result == "complete") {
+          log.innerText += " success";
+          setTimeout(() => {
+            push('/home');
+          }, 500);
+        } else {
+          setTimeout(retryTimeout, 1500);
+          log.innerText += " failed";
+          return;
+        }
+      } catch (e) {
+        clearInterval(interval);
+        log.innerText += " failed, skip saving for web..";
         setTimeout(() => {
           push('/home');
-        }, 1000);
-      } else {
-        setTimeout(retryTimeout, 1500);
-        log.innerText += " failed";
-        return;
+        }, 2000);
       }
     } catch(e) {
+      console.error(e);
       setTimeout(retryTimeout, 1500);
       clearInterval(interval);
       log.innerText += " failed";
@@ -90,6 +100,7 @@
   }
 
   onMount(async () => {
+    // @ts-ignore
     const auth = await window.electronAPI.getSavedData();
     if(auth[0] != undefined) {
       url = auth[0];
