@@ -54,7 +54,7 @@
   }
 
   .contentsContainer {
-    margin-top: 2vh;
+    margin-top: 3vh;
     overflow-y: hidden;
     width: 100%;
     display: flex;
