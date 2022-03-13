@@ -5,6 +5,9 @@
   import DefaultCuration from "../../components/Home/Default.svelte";
 
   let homes = [];
+  let contents = [];
+  let scrollBtnL = [];
+  let scrollBtnR = [];
 
   const subscribe = homeData.subscribe(value => {
     //test data
@@ -14,15 +17,49 @@
     homes = value;
     console.log(homes);
   });
+
+  const scrollLeft = (n) => {
+    const count = Math.floor((window.innerWidth / 100 * 81) / (window.innerWidth / 50 * 7));
+    const gap = contents[n].scrollLeft % (window.innerWidth / 50 * 7);
+    const left = contents[n].scrollLeft - window.innerWidth / 50 * 7 * count - gap;
+    scrollBtnR[n].classList.remove('disabled');
+    if(left <= 0) {
+      scrollBtnL[n].classList.add('disabled');
+    }
+    contents[n].scroll({
+      top: 0,
+      left: left,
+      behavior: 'smooth'
+    });
+  };
+
+  const scrollRight = (n) => {
+    const count = Math.floor((window.innerWidth / 100 * 81) / (window.innerWidth / 50 * 7));
+    const gap = contents[n].scrollLeft % (window.innerWidth / 50 * 7);
+    const left = contents[n].scrollLeft + window.innerWidth / 50 * 7 * count - gap;
+    scrollBtnL[n].classList.remove('disabled');
+    if(left >= contents[n].scrollWidth - (window.innerWidth / 100 * 81)) {
+      scrollBtnR[n].classList.add('disabled');
+    }
+    contents[n].scroll({
+      top: 0,
+      left: left,
+      behavior: 'smooth'
+    });
+  };
 </script>
 
 <main>
-  {#each homes as block}
+  {#each homes as block, i}
     <div class="blockContainer">
       <div class="titleContainer">
         <span class="title">{block.title}</span>
+        <div class="scrollContainer">
+          <img src="./icons/scroll-left.svg" alt="scroll to left" bind:this={scrollBtnL[i]} class="scrollBtn disabled" on:click={() => { scrollLeft(i) }}>
+          <img src="./icons/scroll-right.svg" alt="scroll to right" bind:this={scrollBtnR[i]} class="scrollBtn" on:click={() => { scrollRight(i) }}>
+        </div>
       </div>
-      <div class="contentsContainer">
+      <div class="contentsContainer" bind:this={contents[i]}>
         {#each block.contents as data}
           <DefaultCuration data={data} />
         {/each}
@@ -50,7 +87,22 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+  }
+
+  .scrollContainer {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .scrollBtn {
+    cursor: pointer;
+    margin-left: 0.5vw;
+    height: 4vh;
+  }
+
+  .scrollBtn.disabled {
+    opacity: 0.5;
   }
 
   .contentsContainer {
