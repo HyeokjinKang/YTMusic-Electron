@@ -110,8 +110,13 @@
   }
 
   #infoRight {
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 70%;
     font-size: 1.7vh;
     font-weight: 400;
+    overflow-x: hidden;
   }
 
   #curationExplanation {
