@@ -95,6 +95,11 @@
     padding-left: 1.5vw;
     font-size: 3vh;
     font-weight: 300;
+    transition-duration: 0.1s;
+  }
+
+  .selection:hover {
+    color: #FFFFFF;
   }
 
   .selection.selected {
