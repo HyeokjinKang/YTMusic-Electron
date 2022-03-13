@@ -27,6 +27,7 @@
     justify-content: center;
     box-sizing: border-box;
     background-color: #333333be;
+    backdrop-filter: blur(5px);
     border: 1px solid #DDD;
     border-radius: 5vh;
     height: 5vh;
