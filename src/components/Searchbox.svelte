@@ -7,6 +7,7 @@
 
 <style>
   #container {
+    pointer-events: none;
     box-sizing: border-box;
     padding-right: 6vh;
     left: 0;
@@ -20,6 +21,7 @@
   }
 
   #searchBox {
+    pointer-events: all;
     display: flex;
     align-items: center;
     justify-content: center;
