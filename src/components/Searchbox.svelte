@@ -1,6 +1,6 @@
 <div id="container">
   <div id="searchBox">
-    <img src="/icons/search.svg" alt="Search" id="searchIcon">
+    <img src="./icons/search.svg" alt="Search" id="searchIcon">
     <input type="text" id="search" placeholder="Search.." autocomplete="off">
   </div>
 </div>

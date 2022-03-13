@@ -18,22 +18,22 @@
         <span id="trackName">-</span>
         <span id="producerName"></span>
       </div>
-      <img src="/icons/favorite.svg" alt="favorite" id="favorite" class="playerIcons">
-      <img src="/icons/dislike.svg" alt="dislike" id="dislike" class="playerIcons">
+      <img src="./icons/favorite.svg" alt="favorite" id="favorite" class="playerIcons">
+      <img src="./icons/dislike.svg" alt="dislike" id="dislike" class="playerIcons">
     </div>
     <div id="controllerContainer">
       <span id="durationTime" class="controllerTimes">0:00</span>
-      <img src="/icons/previous.svg" alt="previous" id="previous" class="controllerIcons">
-      <img src="/icons/play.svg" alt="play" id="play">
-      <img src="/icons/next.svg" alt="next" id="next" class="controllerIcons">
+      <img src="./icons/previous.svg" alt="previous" id="previous" class="controllerIcons">
+      <img src="./icons/play.svg" alt="play" id="play">
+      <img src="./icons/next.svg" alt="next" id="next" class="controllerIcons">
       <span id="lengthTime" class="controllerTimes">0:00</span>
     </div>
     <div id="menuContainer">
-      <img src="/icons/volume.svg" alt="volume" id="volume" class="playerIcons">
+      <img src="./icons/volume.svg" alt="volume" id="volume" class="playerIcons">
       <input type="range" id="volumeSlider">
-      <img src="/icons/shuffle.svg" alt="shuffle" id="shuffle" class="playerIcons">
-      <img src="/icons/repeat.svg" alt="repeat" id="repeat" class="playerIcons">
-      <img src="/icons/expand.svg" alt="expand" id="expand" class="playerIcons">
+      <img src="./icons/shuffle.svg" alt="shuffle" id="shuffle" class="playerIcons">
+      <img src="./icons/repeat.svg" alt="repeat" id="repeat" class="playerIcons">
+      <img src="./icons/expand.svg" alt="expand" id="expand" class="playerIcons">
     </div>
   </div>
 </div>
