@@ -2,10 +2,13 @@
   import { onMount } from "svelte";
 
   export let data;
+  export let isLast;
 
   let type = "";
+  let curationContainer;
 
   onMount(() => {
+    if(isLast) curationContainer.style.marginRight = "0vw";
     if(data.year) {
       type = "Album";
     } else if(data.artists) {
@@ -24,8 +27,7 @@
   });
 </script>
 
-<div id="curationContainer">
-  <div id="imageContainer" style="background-image: url('{data.thumbnails[data.thumbnails.length - 1].url}')">
+<div id="curationContainer" bind:this={curationContainer}>
     <div id="infoContainer">
       <span id="infoLeft">
         {type}

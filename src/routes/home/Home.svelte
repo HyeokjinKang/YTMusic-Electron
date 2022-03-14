@@ -65,8 +65,8 @@
         </div>
       </div>
       <div class="contentsContainer" bind:this={contents[i]} on:scroll={() => { scrolled(i) }}>
-        {#each block.contents as data}
-          <DefaultCuration data={data} />
+        {#each block.contents as data, j}
+          <DefaultCuration data={data} isLast={j == block.contents.length - 1} />
         {/each}
       </div>
     </div>
