@@ -16,7 +16,7 @@
           {/if}
         {:else if data.subscribers}
           Artist
-        {:else if data.description}
+        {:else if data.description && !data.author}
           Mix
         {:else}
           Playlist
