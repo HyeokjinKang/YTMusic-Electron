@@ -130,5 +130,6 @@
     font-size: 1.7vh;
     font-weight: 500;
     max-height: 3.2em;
+    overflow-y: hidden;
   }
 </style>
