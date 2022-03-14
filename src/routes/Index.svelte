@@ -6,7 +6,7 @@
   let id = "";
   let pw = "";
 
-  let formContainer, logContainer, log;
+  let formContainer, logContainer, log, isLoaded;
 
   const fetchWithAuth = async (url) => {
     const res = await fetch(url, {
@@ -24,6 +24,7 @@
   }
 
   const retryTimeout = () => {
+    isLoaded = false;
     formContainer.classList.add("visible");
     logContainer.classList.add("invisible");
   }
@@ -62,6 +63,9 @@
       if(data.length == 15) {
         homeData.set(data);
         log.innerText += " ok";
+        if(isLoaded) {
+          return push('/home');
+        }
       } else {
         setTimeout(retryTimeout, 1500);
         log.innerText += " failed";
@@ -107,6 +111,7 @@
       id = auth[1];
       pw = auth[2];
       verifyAuth();
+      isLoaded = true;
     }
   });
 </script>
