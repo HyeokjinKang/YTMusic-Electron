@@ -19,7 +19,6 @@
   };
 
   export let screen = 0;
-  export let id = "";
 </script>
 
 <div id="mainContainer">
@@ -32,7 +31,7 @@
   </div>
 </div>
 <div id="playerContainer">
-  <Player id={id} />
+  <Player />
 </div>
 
 <style>

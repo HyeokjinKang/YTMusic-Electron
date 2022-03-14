@@ -1,10 +1,17 @@
 <script>
-  export let id;
-  $: id && updateTrack(id);
+  import { id, type } from '../stores.js';
 
-  const updateTrack = id => {
-    console.log(id);
-  };
+  let playing = [];
+
+  const subscribeId = id.subscribe(value => {
+    playing[1] = value;
+    console.log(playing);
+  });
+
+  const subscribeType = type.subscribe(value => {
+    playing[0] = value;
+    console.log(playing);
+  });
 </script>
 
 <div id="playerVerticalContainer">
