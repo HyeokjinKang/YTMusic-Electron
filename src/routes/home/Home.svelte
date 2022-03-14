@@ -22,10 +22,6 @@
     const count = Math.floor((window.innerWidth / 100 * 81) / (window.innerWidth / 50 * 7));
     const gap = contents[n].scrollLeft % (window.innerWidth / 50 * 7);
     const left = contents[n].scrollLeft - window.innerWidth / 50 * 7 * count - gap;
-    scrollBtnR[n].classList.remove('disabled');
-    if(left <= 0) {
-      scrollBtnL[n].classList.add('disabled');
-    }
     contents[n].scroll({
       top: 0,
       left: left,
@@ -37,16 +33,25 @@
     const count = Math.floor((window.innerWidth / 100 * 81) / (window.innerWidth / 50 * 7));
     const gap = contents[n].scrollLeft % (window.innerWidth / 50 * 7);
     const left = contents[n].scrollLeft + window.innerWidth / 50 * 7 * count - gap;
-    scrollBtnL[n].classList.remove('disabled');
-    if(left >= contents[n].scrollWidth - (window.innerWidth / 100 * 81)) {
-      scrollBtnR[n].classList.add('disabled');
-    }
     contents[n].scroll({
       top: 0,
       left: left,
       behavior: 'smooth'
     });
   };
+
+  const scrolled = (n) => {
+    console.log(contents[n].scrollLeft);
+    const left = contents[n].scrollLeft;
+    if(left >= contents[n].scrollWidth - (window.innerWidth / 100 * 81)) {
+      scrollBtnR[n].classList.add('disabled');
+    } else if(left <= 0) {
+      scrollBtnL[n].classList.add('disabled');
+    } else {
+      scrollBtnL[n].classList.remove('disabled');
+      scrollBtnR[n].classList.remove('disabled');
+    }
+  }
 </script>
 
 <main>
@@ -59,7 +64,7 @@
           <img src="./icons/scroll-right.svg" alt="scroll to right" bind:this={scrollBtnR[i]} class="scrollBtn" on:click={() => { scrollRight(i) }}>
         </div>
       </div>
-      <div class="contentsContainer" bind:this={contents[i]}>
+      <div class="contentsContainer" bind:this={contents[i]} on:scroll={() => { scrolled(i) }}>
         {#each block.contents as data}
           <DefaultCuration data={data} />
         {/each}
