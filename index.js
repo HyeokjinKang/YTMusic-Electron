@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, ipcMain } = require("electron");
+const { app, BrowserWindow, screen, ipcMain, globalShortcut } = require("electron");
 const Store = require("electron-store");
 const path = require("path");
 
@@ -42,6 +42,20 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("browser-window-focus", function () {
+  globalShortcut.register("CommandOrControl+R", () => {
+    console.log("CommandOrControl+R: Reload Disabled");
+  });
+  globalShortcut.register("F5", () => {
+    console.log("F5: Reload Disabled");
+  });
+});
+
+app.on("browser-window-blur", function () {
+  globalShortcut.unregister("CommandOrControl+R");
+  globalShortcut.unregister("F5");
 });
 
 ipcMain.handle("data-check", async (event) => {
