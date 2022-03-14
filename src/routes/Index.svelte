@@ -1,7 +1,7 @@
 <script>
   import { homeData } from '../stores.js';
   import { onMount } from "svelte";
-  import { push } from "svelte-spa-router";
+  import { replace } from "svelte-spa-router";
   let url = "";
   let id = "";
   let pw = "";
@@ -64,7 +64,7 @@
         homeData.set(data);
         log.innerText += " ok";
         if(isLoaded) {
-          return push('/home');
+          return replace('/home');
         }
       } else {
         setTimeout(retryTimeout, 1500);
@@ -80,7 +80,7 @@
         if(result == "complete") {
           log.innerText += " success";
           setTimeout(() => {
-            push('/home');
+            replace('/home');
           }, 500);
         } else {
           setTimeout(retryTimeout, 1500);
@@ -91,7 +91,7 @@
         clearInterval(interval);
         log.innerText += " failed, skip saving for web..";
         setTimeout(() => {
-          push('/home');
+          replace('/home');
         }, 2000);
       }
     } catch(e) {
