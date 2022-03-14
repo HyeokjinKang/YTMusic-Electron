@@ -1,38 +1,42 @@
 <script>
+  import { onMount } from "svelte";
+
   export let data;
+
+  let type = "";
+
+  onMount(() => {
+    if(data.year) {
+      type = "Album";
+    } else if(data.artists) {
+      if(data.artists[0].name == "Song" && data.artists.length > 1) {
+        type = "Song";
+      } else {
+        type = "Video";
+      }
+    } else if(data.subscribers) {
+      type = "Artist";
+    } else if(data.description && !data.author) {
+      type = "Mix";
+    } else {
+      type = "Playlist";
+    }
+  });
 </script>
 
 <div id="curationContainer">
   <div id="imageContainer" style="background-image: url('{data.thumbnails[data.thumbnails.length - 1].url}')">
     <div id="infoContainer">
       <span id="infoLeft">
-        {#if data.year}
-          Album
-        {:else if data.artists}
-          {#if data.artists[0].name == "Song" && data.artists.length > 1}
-            Song
-          {:else}
-            Video
-          {/if}
-        {:else if data.subscribers}
-          Artist
-        {:else if data.description && !data.author}
-          Mix
-        {:else}
-          Playlist
-        {/if}
+        {type}
       </span>
       <span id="infoRight">
-        {#if data.year}
+        {#if type == "Album"}
           {data.year}
-        {:else if data.artists}
-          {#if data.artists[0].name == "Song" && data.artists.length > 1}
-            {data.artists[1].name}
-          {:else}
-            {data.artists[0].name}
-          {/if}
-        {:else}
-          <!-- none -->
+        {:else if type == "Song"}
+          {data.artists[1].name}
+        {:else if type == "Video"}
+          {data.artists[0].name}
         {/if}
       </span>
     </div>
