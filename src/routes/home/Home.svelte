@@ -1,6 +1,6 @@
 <script>
   import { homeData } from '../../stores.js';
-  import { onMount, getContext } from "svelte";
+  import { onMount } from "svelte";
 
   import DefaultCuration from "../../components/Home/Default.svelte";
 
