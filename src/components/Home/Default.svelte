@@ -1,43 +1,64 @@
 <script>
   import { onMount } from "svelte";
+  import { push } from "svelte-spa-router";
+
+  import { id, type } from '../../stores.js';
 
   export let data;
   export let isLast;
 
-  let type = "";
+  let typeText = "";
   let curationContainer;
+
+  const curationClicked = () => {
+    if(typeText == "Album") {
+      // data.browseId
+      push("/album/" + data.browseId);
+    } else if(typeText == "Artist") {
+      // data.browseId
+      push("/artist/" + data.browseId);
+    } else if(typeText == "Song" || typeText == "Video") {
+      // data.playlistId, data.videoId
+      type.set(typeText);
+      id.set(data.videoId);
+    } else if(typeText == "Mix" || typeText == "Playlist") {
+      // data.playlistId
+      push("/playlist/" + data.playlistId);
+    }
+  };
 
   onMount(() => {
     if(isLast) curationContainer.style.marginRight = "0vw";
     if(data.year) {
-      type = "Album";
+      typeText = "Album";
     } else if(data.artists) {
       if(data.artists[0].name == "Song" && data.artists.length > 1) {
-        type = "Song";
+        typeText = "Song";
       } else {
-        type = "Video";
+        typeText = "Video";
       }
     } else if(data.subscribers) {
-      type = "Artist";
+      typeText = "Artist";
     } else if(data.description && !data.author) {
-      type = "Mix";
+      typeText = "Mix";
     } else {
-      type = "Playlist";
+      typeText = "Playlist";
     }
   });
 </script>
 
 <div id="curationContainer" bind:this={curationContainer}>
+  <div id="imageContainer" style="background-image: url('{data.thumbnails[data.thumbnails.length - 1].url}')" on:click={curationClicked}>
     <div id="infoContainer">
       <span id="infoLeft">
-        {type}
+        {typeText}
       </span>
       <span id="infoRight">
-        {#if type == "Album"}
+        {#if typeText == "Album"}
           {data.year}
-        {:else if type == "Song"}
+        {:else if typeText == "Song"}
           {data.artists[1].name}
-        {:else if type == "Video"}
+        {:else if typeText == "Video"}
           {data.artists[0].name}
         {/if}
       </span>
