@@ -1,4 +1,5 @@
 const { app, BrowserWindow, screen, ipcMain, globalShortcut } = require("electron");
+const ytdl = require("ytdl-core");
 const Store = require("electron-store");
 const path = require("path");
 
@@ -67,4 +68,10 @@ ipcMain.handle("initialize-save", async (event, data) => {
   store.set("id", data[1]);
   store.set("pw", data[2]);
   return "complete";
+});
+
+ipcMain.handle("get-stream", async (event, data) => {
+  //막힘 ㅜㅜ
+  const stream = ytdl(`https://www.youtube.com/watch?v=${data}`, { filter: "audioonly", dlChunkSize: 0 });
+  return stream;
 });

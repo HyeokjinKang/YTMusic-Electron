@@ -1,16 +1,53 @@
 <script>
+  import { onMount } from "svelte";
+  import { Howl, Howler } from "howler";
   import { id, type } from '../stores.js';
 
   let playing = [];
+  let favoIcon = [];
+  let trackName = "";
+  let producerName = ["", ""];
+  let basicAuth = [];
+  
+  const fetchWithAuth = async (url) => {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Authorization": `Basic ${btoa(`${basicAuth[1]}:${basicAuth[2]}`)}`
+      }
+    });
+    const json = await res.json();
+    return json;
+  }
 
-  const subscribeId = id.subscribe(value => {
+  const trackInitialize = async (id) => {
+    const information = await fetchWithAuth(`${basicAuth[0]}/track/${id}`);
+      trackName = information.videoDetails.title;
+      producerName[0] = information.videoDetails.author;
+    // @ts-ignore
+    const stream = await window.electronAPI.getStream(id);
+    console.log(stream);
+  };
+
+  const subscribeId = id.subscribe(async value => {
     playing[1] = value;
-    console.log(playing);
+    if(value != "") {
+      trackInitialize(value);
+    }
   });
 
   const subscribeType = type.subscribe(value => {
     playing[0] = value;
-    console.log(playing);
+  });
+
+  onMount(async () => {
+    // @ts-ignore
+    const auth = await window.electronAPI.getSavedData();
+    if(auth[0] != undefined) {
+      basicAuth[0] = auth[0]; //url
+      basicAuth[1] = auth[1]; //id
+      basicAuth[2] = auth[2]; //pw
+    }
   });
 </script>
 
@@ -22,11 +59,11 @@
     <div id="albumContainer">
       <div id="albumArt"></div>
       <div id="albumInfoContainer">
-        <span id="trackName">-</span>
-        <span id="producerName"></span>
+        <span id="trackName">{trackName}</span>
+        <span id="producerName">{producerName[0]}</span>
       </div>
-      <img src="./icons/favorite.svg" alt="favorite" id="favorite" class="playerIcons">
-      <img src="./icons/dislike.svg" alt="dislike" id="dislike" class="playerIcons">
+      <img src="./icons/favorite.svg" bind:this={favoIcon[0]} alt="favorite" id="favorite" class="playerIcons">
+      <img src="./icons/dislike.svg" bind:this={favoIcon[1]} alt="dislike" id="dislike" class="playerIcons">
     </div>
     <div id="controllerContainer">
       <span id="durationTime" class="controllerTimes">0:00</span>
